@@ -41,4 +41,6 @@ dependencies:
     - faiss-cpu
     - pinecone-client
     - huggingface_hub
+    - pypdf
+    - cryptography>=3.1
 

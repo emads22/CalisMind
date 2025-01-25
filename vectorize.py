@@ -1,4 +1,3 @@
-import argparse
 # from langchain.document_loaders import DirectoryLoader, PyPDFLoader
 from langchain_community.document_loaders import DirectoryLoader, PyPDFLoader
 from langchain.text_splitter import CharacterTextSplitter
@@ -150,11 +149,15 @@ def document_stats(documents, chunks):
 
     # Unique authors
     authors = set(doc.metadata["author"] for doc in documents)
-    print(f"- Unique authors found: {', '.join(authors)}")
+    print(f"- Unique authors found:")
+    for idx, author in enumerate(authors, start=1):
+        print(f"\t{idx}. {author}")
 
     # Unique books
     books = set(doc.metadata["book"] for doc in documents)
-    print(f"- Unique books found: {', '.join(books)}")
+    print(f"- Unique books found:")
+    for idx, book in enumerate(books, start=1):
+        print(f"\t{idx}. {book}")
     print(f"{'=' * 40}\n")
 
 

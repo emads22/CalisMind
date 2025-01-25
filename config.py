@@ -43,6 +43,18 @@ Recommended Chunking Values for Common Use Cases:
     . Overlap: 150-250
 """
 
+# Number of top chunks to retrieve from the vector store for each query.
+K_RESULTS = 25
+"""
+Suggestions for K_RESULTS:
+- Small Knowledge Base (e.g., < 500 chunks): Use a smaller value like 5-10 to reduce unnecessary retrieval.
+- Large Knowledge Base (e.g., > 5000 chunks): Use a larger value like 25-50 for better recall.
+- Question Answering: A value of 15-30 is recommended to capture enough context without overwhelming the LLM.
+- Summarization: Lower values (5-10) are often sufficient since the focus is on summarizing key points.
+- Experiment: Start with 25 as a baseline and adjust based on retrieval performance and LLM output quality.
+"""
+
+
 # Define CLI interface information
 VECTORIZE_CLI_TITLE = "CLI for managing document processing, vector store creation, and statistics."
 
