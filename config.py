@@ -72,3 +72,44 @@ VECTORIZE_CLI_CHOICES = [
 # - Adjust `DB_PATH` and `KNOWLEDGE_BASE_DIR` as needed to suit your directory structure.
 # - Use CHUNK_SIZE and CHUNK_OVERLAP values based on the specific use case for optimal performance.
 # - The CLI menu options are defined in VECTORIZE_CLI_CHOICES and correspond to actions in the interactive CLI.
+
+# Define the custom UI interface styling
+UI_CSS = """
+#calismind-header {
+    text-align: center; /* Center-align the text */
+    font-family: 'Arial', sans-serif; /* Use a modern, clean font */
+    color: #333; /* Dark gray color for better readability */
+    line-height: 1.8; /* Add line spacing for better readability */
+    margin-bottom: 20px; /* Add some space below the header */
+}
+
+#calismind-header h1 {
+    font-size: 3rem; /* Make the title larger */
+    font-weight: bold; /* Make the title bold */
+    color: #4CAF50; /* Add a visually appealing green color to the title */
+}
+
+#calismind-header p {
+    font-size: 1.2rem; /* Adjust the description text size */
+    margin-top: 10px; /* Add some spacing above the description */
+}
+
+/* Style the send button */
+#send-button {
+    background-color: #4CAF50; /* Primary color */
+    color: white;
+    height: 3em; 
+    font-size: 2em;
+    font-weight: bold;
+    padding: 10px 20px;
+    border-radius: 5px;
+    border: none;
+    transition: all 0.3s ease-in-out;
+}
+
+/* Hover effect for send button */
+#send-button:hover {
+    background-color: #45a049; /* Hover color */
+    transform: scale(1.05); /* Slight zoom effect */
+}
+"""

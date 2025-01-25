@@ -1,5 +1,5 @@
 
-# CalisMind
+# CalisMind: Unlock the Art of Bodyweight Training
 
 ![CalisMind_logo](./assets/images/CalisMind_logo.png)
 
