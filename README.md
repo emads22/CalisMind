@@ -58,6 +58,24 @@ To use OpenAI models, you'll need to configure your API keys:
    PINECONE_API_KEY=your_pinecone_api_key
    ```
 
+### Configuring `config.py`
+The `config.py` file contains key variables that control the behavior and setup of the CalisMind application. Users are encouraged to adjust these variables to suit their specific use case:
+
+1. **Model Selection**:
+   - `OPENAI_MODEL`: Choose the OpenAI model to use (e.g., `"gpt-4o"` for optimal performance or `"gpt-4o-mini"` for lower costs).
+   
+2. **Paths**:
+   - `DB_PATH`: Path to store the vector database. Adjust if you want to use a different directory.
+   - `KNOWLEDGE_BASE_DIR`: Path to your local knowledge base (e.g., PDFs). Ensure this directory exists and contains the documents you want to process.
+
+3. **Document Chunking**:
+   - `CHUNK_SIZE` and `CHUNK_OVERLAP`: Control how documents are split into smaller pieces for retrieval. Refer to the comments in `config.py` for recommended values based on your use case (e.g., question answering, summarization, or information retrieval).
+
+4. **Retriever Settings**:
+   - `K_RESULTS`: Defines the number of top chunks retrieved for each query. Adjust based on the size of your knowledge base and desired performance.
+
+These settings are documented in `config.py` with detailed suggestions and recommendations to help you tailor the application to your needs.
+
 ### Model Customization
 CalisMind is designed to be flexible and supports a wide range of AI models, whether open-source, closed-source, or even custom-built models. While the default implementation uses OpenAI's `gpt-4o` model for its conversational and retrieval-augmented generation features, users are free to choose any model that suits their needs. 
 
