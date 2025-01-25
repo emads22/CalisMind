@@ -56,7 +56,7 @@ def initialize_conversation_chain():
     return conversation_chain
 
 
-def ask_question(conversation_chain, question):
+def test_question(conversation_chain, question):
     """
     Asks a question to the conversational retrieval chain and prints the answer.
 
@@ -85,7 +85,7 @@ if __name__ == "__main__":
 
         # Example question related to calisthenics
         question = "What are the benefits of pull-ups for upper body strength?"
-        answer = ask_question(conversation_chain, question)
+        answer = test_question(conversation_chain, question)
 
     except ValueError as e:
         print(e)

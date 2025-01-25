@@ -23,7 +23,3 @@ __pycache__/
 # Ignore knowledge base directories
 calisthenics_knowledge_base/
 **/calisthenics_knowledge_base/
-
-# Ignore vector db
-calisthenics_db/
-**/calisthenics_db/

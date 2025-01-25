@@ -15,7 +15,7 @@ OPENAI_MODEL = "gpt-4o"  # Alternatively for lower costs: "gpt-4o-mini"
 
 # Define paths for storing the vector database and knowledge base
 # Path to store the vector database (Chroma store)
-DB_PATH = Path("./calisthenics_db")
+DB_PATH = Path("./calismind_db")
 # Root directory for the knowledge base (PDFs, etc.)
 KNOWLEDGE_BASE_DIR = Path("./calisthenics_knowledge_base")
 
