@@ -1,0 +1,21 @@
+# Ignore environment variables
+.env
+**/.env
+
+# Ignore Jupyter notebook checkpoint files
+.ipynb_checkpoints/
+**/.ipynb_checkpoints/
+
+# Ignore Python compiled files
+*.pyc
+__pycache__/
+
+# Ignore conda environment files
+*.conda
+*.pkl
+
+# Ignore common system files
+.DS_Store
+
+# Ignore build directories
+/build/

@@ -1,0 +1,35 @@
+name: calismind
+channels:
+  - defaults
+  - conda-forge
+  - pytorch
+  - nvidia
+
+dependencies:
+  - python=3.10
+  - pip
+  - os
+  - dotenv
+  - gradio
+  - pathlib
+  - matplotlib
+  - scikit-learn
+  - numpy
+  - plotly
+  - langchain
+  - langchain_openai
+  - langchain_chroma
+  - huggingface_hub
+  - pytorch
+  - pytorch-cuda
+  - pip:
+      - openai
+      - chromadb
+      - tiktoken
+      - faiss-cpu
+      - pinecone-client
+      - anthropic
+      - google-generativeai
+      - transformers
+      - accelerate
+      - huggingface-inference-toolkit
