@@ -12,20 +12,22 @@ Whether you're a beginner looking to master the basics or a seasoned athlete aim
 
 ---
 
+## Features
+
 - **Conversational AI**:
   Engage with an AI-powered chatbot trained on calisthenics resources for tailored advice and learning.
   
 - **Retrieval-Augmented Generation (RAG)**:
-  Combines knowledge retrieval with OpenAI's LLMs to provide accurate and context-aware answers.
+  Combines knowledge retrieval with OpenAI's LLMs to provide accurate and context-aware answers. The RAG pipeline integrates a vector database to retrieve the most relevant chunks of information from your knowledge base, ensuring the AI generates responses grounded in factual, context-specific content.
 
 - **Dynamic Knowledge Base**:
-  Processes and organizes content from PDFs, making it accessible and searchable.
+  Processes and organizes content from PDFs, making it accessible and searchable. Users can extend or replace the knowledge base with their own documents for personalized use.
 
 - **Interactive Gradio Interface**:
   A user-friendly web interface to chat with the AI and explore the calisthenics knowledge base.
 
 - **Customizable Chunking**:
-  Configurable document chunk sizes and overlap for optimized knowledge retrieval.
+  Configurable document chunk sizes and overlap for optimized knowledge retrieval. Adjust these settings to improve performance for various tasks like summarization or question answering.
 
 ---
 
