@@ -1,4 +1,3 @@
-
 # CalisMind: Unlock the Art of Bodyweight Training
 
 ![CalisMind_logo](./assets/images/CalisMind_logo.png)
@@ -9,25 +8,27 @@
 
 Whether you're a beginner looking to master the basics or a seasoned athlete aiming to refine advanced techniques, CalisMind offers unparalleled support. It provides detailed explanations, the benefits of exercises, training programs, and expert advice to help users enhance their understanding and performance in calisthenics. Designed with flexibility and adaptability in mind, CalisMind empowers users to unlock the full potential of their fitness journey with ease and confidence.
 
-
 ---
 
 ## Features
 
-- **Conversational AI**:
+- **Conversational AI**:  
   Engage with an AI-powered chatbot trained on calisthenics resources for tailored advice and learning.
   
-- **Retrieval-Augmented Generation (RAG)**:
+- **Retrieval-Augmented Generation (RAG)**:  
   Combines knowledge retrieval with OpenAI's LLMs to provide accurate and context-aware answers. The RAG pipeline integrates a vector database to retrieve the most relevant chunks of information from your knowledge base, ensuring the AI generates responses grounded in factual, context-specific content.
 
-- **Dynamic Knowledge Base**:
+- **Dynamic Knowledge Base**:  
   Processes and organizes content from PDFs, making it accessible and searchable. Users can extend or replace the knowledge base with their own documents for personalized use.
 
-- **Interactive Gradio Interface**:
+- **Interactive Gradio Interface**:  
   A user-friendly web interface to chat with the AI and explore the calisthenics knowledge base.
 
-- **Customizable Chunking**:
+- **Customizable Chunking**:  
   Configurable document chunk sizes and overlap for optimized knowledge retrieval. Adjust these settings to improve performance for various tasks like summarization or question answering.
+
+- **Flexible Embedding Models**:  
+  Choose between OpenAI embeddings or HuggingFace open-source models for vector creation, providing options for cost-effective, offline, and customizable usage.
 
 ---
 
@@ -65,54 +66,68 @@ The `config.py` file contains key variables that control the behavior and setup 
 
 1. **Model Selection**:
    - `OPENAI_MODEL`: Choose the OpenAI model to use (e.g., `"gpt-4o"` for optimal performance or `"gpt-4o-mini"` for lower costs).
-   
-2. **Paths**:
+
+2. **Embedding Model Selection**:
+   - `HF_EMBEDDINGS_MODEL`: Define the HuggingFace embeddings model for vector creation. By default, the model is set to `"sentence-transformers/all-MiniLM-L6-v2"`, which balances speed and accuracy. Other popular options include:
+     - `"sentence-transformers/all-mpnet-base-v2"`: Higher accuracy but more resource-intensive.
+     - `"sentence-transformers/paraphrase-MiniLM-L12-v2"`: Optimized for paraphrase detection.
+   - To switch between OpenAI embeddings and HuggingFace embeddings, you can configure the embedding logic in the script as per your needs.
+
+3. **Paths**:
    - `DB_PATH`: Path to store the vector database. Adjust if you want to use a different directory.
    - `KNOWLEDGE_BASE_DIR`: Path to your local knowledge base (e.g., PDFs). Ensure this directory exists and contains the documents you want to process.
 
-3. **Document Chunking**:
+4. **Document Chunking**:
    - `CHUNK_SIZE` and `CHUNK_OVERLAP`: Control how documents are split into smaller pieces for retrieval. Refer to the comments in `config.py` for recommended values based on your use case (e.g., question answering, summarization, or information retrieval).
 
-4. **Retriever Settings**:
+5. **Retriever Settings**:
    - `K_RESULTS`: Defines the number of top chunks retrieved for each query. Adjust based on the size of your knowledge base and desired performance.
 
+6. **Adjustable Constants**:
+   - `MAX_TOKENS`: Sets the maximum token limit for responses. Increase or decrease based on the expected response length and API limits.
+   - `TEMPERATURE`: Controls the randomness of responses. Use lower values (e.g., `0.2`) for deterministic outputs and higher values (e.g., `0.8`) for more creative responses.
+   - `SYSTEM_PROMPT`: Defines the behavior and tone of the assistant. Modify this to customize the assistant's responses and personality.
+
 These settings are documented in `config.py` with detailed suggestions and recommendations to help you tailor the application to your needs.
-
-### Model Customization
-CalisMind is designed to be flexible and supports a wide range of AI models, whether open-source, closed-source, or even custom-built models. While the default implementation uses OpenAI's `gpt-4o` model for its conversational and retrieval-augmented generation features, users are free to choose any model that suits their needs. 
-
-To integrate your preferred model:
-1. **Closed-Source Models (e.g., OpenAI, Anthropic)**:
-   - Obtain the required API keys from the respective provider.
-   - Add the API key to your `.env` file. For example:
-     ```env
-     OPENAI_API_KEY=your_openai_api_key
-     ```
-
-2. **Open-Source Models (e.g., Hugging Face Models)**:
-   - Ensure you have a Hugging Face account and a valid access token.
-   - Add the token to your `.env` file to authenticate and load models from the Hugging Face Hub:
-     ```env
-     HUGGINGFACEHUB_API_TOKEN=your_huggingface_access_token
-     ```
-
-3. **Custom Models**:
-   - If you're using a locally hosted model or a custom model, ensure it can be accessed via an API endpoint or directly loaded in the codebase.
-   - Modify the `initialize_conversation_chain` function or similar setup to use your custom model.
-
-**Important**: The flexibility of CalisMind allows users to experiment with different models. Just ensure that the appropriate credentials or configurations are provided for seamless integration.
 
 ---
 
 ## Usage
 
-### Running the App
-1. Navigate to the project directory.
-2. Launch the application:
+### Two Application Options
+CalisMind offers two modes of operation, allowing users to choose based on their needs:
+
+#### 1. **Run `app.py` for Full Control**
+   - This mode allows fine-grained control over the vector store and retrieval process.
+   - Features custom logic for:
+     - Fetching responses.
+     - Streaming results to the user.
+   - Ideal for users who want to experiment with or customize the retrieval and response logic.
+
+   **To run `app.py`:**
    ```bash
    python app.py
    ```
-3. The app will open in your default web browser. If it doesn’t, copy and paste the URL provided in the terminal into your browser.
+   This will launch the Gradio interface for interacting with CalisMind.
+
+#### 2. **Run `langchain_app.py` for Simplified LangChain Abstractions**
+   - Uses LangChain's built-in abstractions for managing the retrieval-augmented generation (RAG) pipeline.
+   - Easier to set up and extend using LangChain's modular components.
+   - Ideal for users who prefer leveraging LangChain's standard patterns without customizing low-level logic.
+
+   **To run `langchain_app.py`:**
+   ```bash
+   python langchain_app.py
+   ```
+   This will also launch a Gradio interface for interaction.
+
+- ### **Comparison of Options:**
+  | Feature                       | `app.py`                          | `langchain_app.py`               |
+  |-------------------------------|-----------------------------------|----------------------------------|
+  | Vector Store Control          | Full control                      | Abstracted via LangChain         |
+  | Retrieval Customization       | Customizable                      | Limited to LangChain patterns    |
+  | Streaming Responses           | Built-in                          | LangChain defaults               |
+  | Ease of Setup                 | Requires manual configuration     | Simpler with LangChain presets   |
 
 ### Customizing the Knowledge Base
 Users are free to use their own knowledge base documents with CalisMind. The project provides a CLI script (`vectorize.py`) that allows you to process and manage custom documents locally. With this script, you can:
@@ -157,6 +172,3 @@ Contributions are welcome! Here are some ways you can contribute to the project:
 This project is licensed under the MIT License, which grants permission for free use, modification, distribution, and sublicense of the code, provided that the copyright notice (attributed to [emads22](https://github.com/emads22)) and permission notice are included in all copies or substantial portions of the software. This license is permissive and allows users to utilize the code for both commercial and non-commercial purposes.
 
 Please see the [LICENSE](LICENSE) file for more details.
-
-
-

@@ -5,8 +5,12 @@ from langchain_community.document_loaders import DirectoryLoader, PyPDFLoader
 from langchain.text_splitter import CharacterTextSplitter
 from langchain_openai import OpenAIEmbeddings
 from langchain_chroma import Chroma
+from langchain.embeddings import HuggingFaceEmbeddings
+from langchain.vectorstores import Chroma
 
-from config import KNOWLEDGE_BASE_DIR, CHUNK_SIZE, CHUNK_OVERLAP, DB_PATH, VECTORIZE_CLI_TITLE, VECTORIZE_CLI_CHOICES
+from config import (KNOWLEDGE_BASE_DIR, CHUNK_SIZE, CHUNK_OVERLAP,
+                    DB_PATH, VECTORIZE_CLI_TITLE, VECTORIZE_CLI_CHOICES,
+                    HF_EMBEDDINGS_MODEL)
 
 
 def add_metadata(doc, author_name, book_name):
@@ -120,6 +124,82 @@ def load_vector_store():
         return None
 
 
+def create_vector_store_hf(chunks):
+    """
+    Creates a vector store from document chunks using Hugging Face embeddings.
+
+    This function generates and persists a vector store using Hugging Face embeddings,
+    offering a local, cost-free alternative to OpenAI embeddings. It checks for an
+    existing vector store and clears its contents if found before creating a new one.
+    Ideal for offline or budget-conscious environments.
+
+    Args:
+        chunks (list): A list of document chunks to be embedded and stored.
+
+    Returns:
+        vector_store (Chroma): The created vector store object.
+    """
+    db_path = Path(
+        f"{str(DB_PATH)}_hf")  # Define the path for the Hugging Face vector store
+
+    # Step 1: Initialize Hugging Face embeddings using the specified model
+    hf_embeddings = HuggingFaceEmbeddings(model_name=HF_EMBEDDINGS_MODEL)
+
+    # Step 2: Attempt to load an existing vector store
+    vector_store = load_vector_store_hf()
+
+    # Step 3: If an existing vector store is found, delete its contents
+    if vector_store:
+        vector_store.delete_collection()
+
+    # Step 4: Create a new vector store using the Hugging Face embeddings
+    vector_store = Chroma.from_documents(
+        documents=chunks,              # Preprocessed chunks to be embedded
+        embedding=hf_embeddings,       # Hugging Face embeddings function
+        # Directory for storing the vector store
+        persist_directory=str(db_path)
+    )
+
+    return vector_store
+    # Notes:
+    # - Install `sentence-transformers` if not already installed: pip install sentence-transformers
+    # - Popular HuggingFace models:
+    #     * "sentence-transformers/all-MiniLM-L6-v2" (lightweight and fast)
+    #     * "sentence-transformers/all-mpnet-base-v2" (higher accuracy, more resource-intensive)
+    # - This function is a direct alternative to OpenAI embeddings for cost-effective and offline usage.
+
+
+def load_vector_store_hf():
+    """
+    Loads an existing vector store that was created using Hugging Face embeddings.
+
+    This function attempts to locate and load a vector store from the predefined
+    directory. If the directory exists, the function initializes the store with 
+    Hugging Face embeddings. If no vector store exists, it returns `None`.
+
+    Returns:
+        vector_store (Chroma or None): The loaded vector store object, or `None`
+                                       if no existing vector store is found.
+    """
+    db_path = Path(
+        f"{str(DB_PATH)}_hf")  # Define the path for the Hugging Face vector store
+
+    # Step 1: Initialize Hugging Face embeddings using the specified model
+    hf_embeddings = HuggingFaceEmbeddings(model_name=HF_EMBEDDINGS_MODEL)
+
+    # Step 2: Check if the vector store directory exists
+    if db_path.exists():
+        # Load the vector store if the directory is found
+        vector_store = Chroma(
+            persist_directory=str(db_path),
+            embedding_function=hf_embeddings
+        )
+        return vector_store
+    else:
+        # Return None if no vector store exists
+        return None
+
+
 def document_stats(documents, chunks):
     """
     Prints statistics about the loaded documents and their chunks.
@@ -214,7 +294,7 @@ def main():
             print(f"  {idx}. {option}")
 
         # Get the user's choice
-        choice = input("\n\n=> Enter your choice (1-6): ")
+        choice = input("\n\n=> Enter your choice (1-8): ")
 
         # Handle the user's choice
         if choice == "1":
@@ -255,21 +335,48 @@ def main():
                     "\n❌ [Error]: No vector store found. Please create one first (Option 3).")
 
         elif choice == "5":
+            print(
+                "\n\n🛠️ Creating a vector store using a Hugging Face open-source model..."
+            )
+            if chunks is None:
+                print(
+                    "\n❌ [Error]: No document chunks found. Please load and split documents first (Option 1)."
+                )
+            else:
+                vector_store = create_vector_store_hf(chunks)
+                print(
+                    "\n✅ [Success]: Vector store successfully created using a Hugging Face model and persisted!"
+                )
+
+        elif choice == "6":
+            print(
+                "\n\n📂 Loading an existing vector store created with a Hugging Face open-source model..."
+            )
+            vector_store = load_vector_store_hf()
+            if vector_store:
+                print(
+                    "\n✅ [Success]: Vector store successfully loaded using a Hugging Face model!")
+            else:
+                print(
+                    "\n❌ [Error]: No existing vector store found. Please create one first using a Hugging Face model (Option 5)."
+                )
+
+        elif choice == "7":
             print("\n\n📈 Printing vector store statistics...")
             if vector_store is None:
                 print(
-                    "\n❌ [Error]: Please create or load a vector store first (Options 3 or 4).")
+                    "\n❌ [Error]: Please create or load a vector store first.")
             else:
                 vector_store_stats(vector_store)
                 print("\n✅ [Success]: Vector store statistics displayed!")
 
-        elif choice == "6":
+        elif choice == "8":
             print("\n\n👋 Exiting the CLI. Goodbye!")
             break
 
         else:
             print(
-                "\n❌ [Error]: Invalid choice. Please enter a number between 1 and 6.")
+                "\n❌ [Error]: Invalid choice. Please enter a number between 1 and 8.")
 
     print(f"\n\n{'=' * 80}\n")
 

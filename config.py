@@ -5,6 +5,13 @@ from pathlib import Path
 # gpt-4o: Optimized for better performance; gpt-4o-mini: Lower-cost alternative
 OPENAI_MODEL = "gpt-4o"  # Alternatively for lower costs: "gpt-4o-mini"
 
+# Default HuggingFace embeddings model.
+HF_EMBEDDINGS_MODEL = "sentence-transformers/all-MiniLM-L6-v2"
+# Notes:
+# - "sentence-transformers/all-MiniLM-L6-v2": Lightweight and fast, ideal for most retrieval tasks.
+# - "sentence-transformers/all-mpnet-base-v2": Higher accuracy but more resource-intensive.
+# - Replace this value with any HuggingFace model suitable for your use case.
+
 # Define paths for storing the vector database and knowledge base
 # Path to store the vector database (Chroma store)
 DB_PATH = Path("./calismind_db")
@@ -57,12 +64,17 @@ TEMPERATURE = 0.7
 VECTORIZE_CLI_TITLE = "CLI for managing document processing, vector store creation, and statistics."
 
 VECTORIZE_CLI_CHOICES = [
-    "Load documents, add metadata, and split into chunks",  # Option 1
-    "Print statistics about documents and chunks",          # Option 2
-    "Create and persist a vector store",                    # Option 3
-    "Load an existing vector store",                        # Option 4
-    "Print statistics about the vector store",              # Option 5
-    "Exit"                                                  # Option 6
+    "Load documents, enrich with metadata, and split into chunks",                  # Option 1
+    "Print detailed statistics about documents and chunks",                         # Option 2
+    "Create and persist a vector store for efficient retrieval",                    # Option 3
+    # Option 4
+    "Load an existing vector store",
+    "Create and persist a vector store using a Hugging Face open-source model",     # Option 5
+    "Load an existing vector store using a Hugging Face open-source model",         # Option 6
+    # Option 7
+    "Print detailed statistics about the vector store",
+    # Option 8
+    "Exit the application"
 ]
 
 # Notes for Developers:
