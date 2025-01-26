@@ -1,10 +1,12 @@
+import os
+from dotenv import load_dotenv
+from pathlib import Path
 from langchain_community.document_loaders import DirectoryLoader, PyPDFLoader
 from langchain.text_splitter import CharacterTextSplitter
 from langchain_openai import OpenAIEmbeddings
 from langchain_chroma import Chroma
-from pathlib import Path
 
-from config import *
+from config import KNOWLEDGE_BASE_DIR, CHUNK_SIZE, CHUNK_OVERLAP, DB_PATH, VECTORIZE_CLI_TITLE, VECTORIZE_CLI_CHOICES
 
 
 def add_metadata(doc, author_name, book_name):
@@ -273,4 +275,27 @@ def main():
 
 
 if __name__ == "__main__":
+    """
+    Entry point for running this script directly.
+    Handles the following:
+    1. Loads environment variables from a .env file for secure management of sensitive keys.
+    2. Validates the presence of the OpenAI API key in the environment.
+    3. Starts the main interactive CLI for document processing and vector store management.
+    """
+
+    # Step 1: Load environment variables from .env file
+    print("\n🔄 Loading environment variables...")
+    load_dotenv()
+
+    # Step 2: Validate the OpenAI API key
+    openai_api_key = os.getenv("OPENAI_API_KEY")
+    if not openai_api_key:
+        raise EnvironmentError(
+            "❌ [Error]: OpenAI API key is missing. Please add it to your .env file as OPENAI_API_KEY.\n"
+        )
+    os.environ["OPENAI_API_KEY"] = openai_api_key
+    print("✅ OpenAI API key successfully loaded.")
+
+    # Step 3: Start the main CLI
+    print("\n🚀 Starting the CLI for document processing...\n")
     main()

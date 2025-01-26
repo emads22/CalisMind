@@ -56,36 +56,46 @@ def initialize_conversation_chain():
     return conversation_chain
 
 
-def test_question(conversation_chain, question):
+def test_conversation_chain(question):
     """
-    Asks a question to the conversational retrieval chain and prints the answer.
+    Tests the conversational retrieval chain by asking a question and printing the response.
 
     Args:
-        conversation_chain (ConversationalRetrievalChain): The initialized conversation chain.
         question (str): The question to ask, related to the calisthenics knowledge base.
 
     Returns:
-        str: The answer retrieved from the conversation chain.
+        None: This function does not return a value. The answer is printed to the console.
+
+    Raises:
+        Exception: If there is an issue initializing the conversation chain or processing the question,
+                   the error message is caught and displayed.
     """
-    print("\n📝 Question:", question)
+    try:
+        # Step 1: Initialize the conversational retrieval chain
+        # This sets up the chain responsible for retrieving and answering questions
+        print("\n🔄 Initializing the conversation chain...")
+        conversation_chain = initialize_conversation_chain()
+        print("\n✅ Conversation chain successfully initialized!")
 
-    # Invoke the conversation chain with the provided question
-    result = conversation_chain.invoke({"question": question})
-    answer = result["answer"]
+        # Step 2: Print the question for context
+        print("\n📝 Question:", question)
 
-    # Print the answer in a formatted way
-    print("\n✅ Answer:", answer)
-    return answer
+        # Step 3: Invoke the conversation chain with the provided question
+        # The chain processes the question and retrieves the answer
+        result = conversation_chain.invoke({"question": question})
+        answer = result["answer"]
+
+        # Step 4: Print the retrieved answer in a formatted way
+        print("\n✅ Answer:", answer)
+
+    except Exception as e:
+        # Handle and display any errors that occur during execution
+        print(f"\n[Error] - {str(e)}\n")
 
 
 if __name__ == "__main__":
-    try:
-        # Initialize the conversation chain
-        conversation_chain = initialize_conversation_chain()
+    # Define an example question related to calisthenics for testing
+    question = "What are the benefits of pull-ups for upper body strength?"
 
-        # Example question related to calisthenics
-        question = "What are the benefits of pull-ups for upper body strength?"
-        answer = test_question(conversation_chain, question)
-
-    except ValueError as e:
-        print(e)
+    # Test the conversational retrieval chain with the example question
+    test_conversation_chain(question)
