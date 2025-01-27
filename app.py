@@ -3,44 +3,8 @@ import openai
 import gradio as gr
 from dotenv import load_dotenv
 from vectorize import load_vector_store
+from rag_setup import user_prompt
 from config import OPENAI_MODEL, SYSTEM_PROMPT, MAX_TOKENS, TEMPERATURE, UI_CSS
-
-
-def user_prompt(user_input):
-    """
-    Generates a formatted prompt based on the user's input question. 
-    Includes relevant references retrieved from the vector store if available.
-
-    Args:
-        user_input (str): The user's input question or query.
-
-    Returns:
-        str: A formatted string that includes:
-             - The user's input.
-             - A "Sources" section with relevant references (author and book name).
-             If no references are retrieved, only the user's input is returned.
-    """
-    # Retrieve results from the global retriever using the user input
-    results = retriever.invoke(user_input)
-
-    # Handle the case where no results are retrieved from the vector store
-    if not results:
-        return f"User Input: {user_input}"
-
-    # Initialize a list to store formatted references
-    retrieved_references = []
-    for doc in results:
-        # Extract metadata from each document, with fallbacks for missing metadata
-        author = doc.metadata.get("author", "Unknown Author")
-        book = doc.metadata.get("book", "Unknown Book")
-        # Append the formatted reference to the list
-        retrieved_references.append(f'- {author} in "{book}"')
-
-    # Remove duplicate references and format the list as a string
-    formatted_references = "\n".join(set(retrieved_references))
-
-    # Build the final prompt, including the user's input and the sources
-    return f"User Input: {user_input}\n\nSources:\n{formatted_references}."
 
 
 def chat(user_input, history):
@@ -58,9 +22,9 @@ def chat(user_input, history):
     """
     # Initialize the messages list with the system prompt
     messages = [{"role": "system", "content": SYSTEM_PROMPT}]
-    # Add the existing history and the current user input to the messages list
+    # Add the existing history and the current user input with retrieval context to the messages list
     messages += history + \
-        [{"role": "user", "content": user_prompt(user_input)}]
+        [{"role": "user", "content": user_prompt(user_input, retriever)}]
 
     # Create the chat completion stream using OpenAI's API
     stream = openai.chat.completions.create(
